@@ -5,6 +5,7 @@ public class PlayerController : MonoBehaviour {
 	public static PlayerController instance;
 
 	public float movementSpeed = 20.0f;
+	public float SlowmotionSpeedAdjustment = 1f;
 	public bool switchCtrl;
 
 	private Rigidbody rb;
@@ -50,13 +51,15 @@ public class PlayerController : MonoBehaviour {
 			rotatedDir = new Vector3 (rotatedDir.x, 0, rotatedDir.z);
 			rotatedDir = rotatedDir.normalized * dir.magnitude;
 
-			rb.AddForce (rotatedDir * movementSpeed);
+			rb.AddForce(rotatedDir * movementSpeed * (SlowmotionSpeedAdjustment / Time.timeScale));
+
+			
 		}
 	}
 
-	void Update () {
-
-		Complete ();
+	void Update ()
+    {
+        Complete();
 	}
 
 	void Complete () {

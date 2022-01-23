@@ -45,6 +45,8 @@ public class CameraController : MonoBehaviour {
 			offset = new Vector3 (0, yOffset, 1f * distance);
 			camReturn = false;
 		}
+
+		//MoveCamera();
 	}
 
 	void FixedUpdate () {
@@ -81,5 +83,13 @@ public class CameraController : MonoBehaviour {
 			offset = Quaternion.Euler (0, 45, 0) * offset;
 		else
 			offset = Quaternion.Euler (0, -45, 0) * offset;
+	}
+	void MoveCamera() {
+		// Moves the camera and faces the player
+		desiredPosition = player.position + offset;
+		transform.position = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * Time.deltaTime);
+		transform.LookAt(player.position + Vector3.up);
+
+		Transparent();
 	}
 }
