@@ -51,7 +51,8 @@ public class PlayerController : MonoBehaviour {
 			rotatedDir = new Vector3 (rotatedDir.x, 0, rotatedDir.z);
 			rotatedDir = rotatedDir.normalized * dir.magnitude;
 
-			rb.AddForce(rotatedDir * movementSpeed * (SlowmotionSpeedAdjustment / Time.timeScale));
+			//If time scale is lower than 1 then speed up the player by the adjusted time.
+			rb.AddForce((Time.timeScale <= 1f) ? (rotatedDir * movementSpeed * Time.unscaledDeltaTime) : (rotatedDir * movementSpeed * Time.unscaledDeltaTime * SlowmotionSpeedAdjustment));
 
 			
 		}
@@ -59,7 +60,7 @@ public class PlayerController : MonoBehaviour {
 
 	void Update ()
     {
-        Complete();
+		Complete();
 	}
 
 	void Complete () {
