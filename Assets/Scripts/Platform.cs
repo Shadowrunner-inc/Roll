@@ -59,14 +59,14 @@ public class Platform : MonoBehaviour {
 				waitTime = startWaitTime;
 			} else {
 
-				waitTime -= Time.deltaTime;
+				waitTime -= Time.fixedDeltaTime;
 			}
 		}
 	}
 	// Rotate the object
 	void Rotate () {
 
-		transform.Rotate (rotateToward * rotateSpeed * Time.deltaTime);
+		transform.Rotate (rotateToward * rotateSpeed * Time.fixedDeltaTime);
 	}
 
 	void OnCollisionEnter (Collision other) {

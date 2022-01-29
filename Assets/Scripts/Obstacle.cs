@@ -20,31 +20,38 @@ public class Obstacle : MonoBehaviour {
 	public bool spawn;
     public GameObject[] projectiles;
     public Vector3 size;
-	public float spawnDuration = 3.0f;
-	public float spawnCooldown = 2.0f;
+	public float spawnDuration = 3.0f, spawnCooldown = 2.0f;
 
-	private float spawnWaitTime;
+    [Header("Shoot Obstacle")]
+    public bool shoot;
+    public GameObject cannonBall;
+    public Transform targetLocation;
+    public float force = 25000.0f, shootSpawnTime = 2.0f, shootCooldown = 4.0f;
+
+    private float spawnWaitTime;
 
 	void Start () {
 		
 		waitTime = startWaitTime;
 		spawnWaitTime = spawnCooldown;
-	}
+        spawnWaitTime = shootCooldown;
+    }
 
 	void FixedUpdate () {
-		// Move object
+
 		if (move)
 			Invoke ("Move", startWaitTime);
-		// Rotate object
 		if (rotate)
 			Rotate ();
 		if (spawn)
 			Invoke ("SpawnObject", startWaitTime);
-	}
+        if (shoot)
+            Invoke("ShootObject", startWaitTime);
+    }
 	// Moves the platform to the designated locations
 	void Move () {
 
-		transform.position = Vector3.MoveTowards (transform.position, moveToward [currentPoint], moveSpeed * Time.deltaTime);
+		transform.position = Vector3.MoveTowards (transform.position, moveToward [currentPoint], moveSpeed * Time.fixedDeltaTime);
 
 		if (Vector3.Distance (transform.position, moveToward [currentPoint]) < 0.2f) {
 
@@ -58,14 +65,14 @@ public class Obstacle : MonoBehaviour {
 				waitTime = startWaitTime;
 			} else {
 
-				waitTime -= Time.deltaTime;
+				waitTime -= Time.fixedDeltaTime;
 			}
 		}
 	}
 	// Rotate the object
 	void Rotate () {
 
-		transform.Rotate (rotateToward * rotateSpeed * Time.deltaTime);
+		transform.Rotate (rotateToward * rotateSpeed * Time.fixedDeltaTime);
 	}
 	// Instantiate objects
 	void SpawnObject () {
@@ -80,9 +87,24 @@ public class Obstacle : MonoBehaviour {
 			spawnWaitTime = spawnCooldown;
 		} else {
 
-			spawnWaitTime -= Time.deltaTime;
+			spawnWaitTime -= Time.fixedDeltaTime;
 		}
 	}
+    // Shoot objstacles with force
+    void ShootObject ()
+    {
+        if (spawnWaitTime <= 0)
+        {
+            GameObject cannon = (GameObject)Instantiate(cannonBall, targetLocation.position, targetLocation.rotation);
+            cannon.GetComponent<Rigidbody>().velocity = targetLocation.forward * force * Time.unscaledDeltaTime;
+            Destroy(cannon, shootSpawnTime);
+
+            spawnWaitTime = spawnCooldown;
+        } else {
+
+            spawnWaitTime -= Time.fixedDeltaTime;
+        }
+    }
 	// Allows to see the area of which the projectiles will be spawned
 	void OnDrawGizmosSelected () {
 
