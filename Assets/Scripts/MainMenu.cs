@@ -1,48 +1,27 @@
-﻿using System.Collections;
-using UnityEngine.UI;
-using TMPro;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-	[Header ("UI Texts")]
-	public TextMeshProUGUI[] mainMenuUIs;
-	public TextMeshProUGUI[] gameUIs;
-	public AnimationCurve curve;
+    public string loadScene;
+    public SceneFader sceneFader;
 
-	[Header ("Camera Rotation")]
-	public GameObject gameManager;
-	public GameObject menuCam;
-	public Vector3 rotateToward;
-
-	private bool gameStart;
-
-    [Header("Others")]
-    public GameObject sceneChange;
-
-    // Use this for initialization
-    void Start () {
-
-		foreach (TextMeshProUGUI text in gameUIs) {
-
-			text.color = new Color (1f, 1f, 1f, 0f);
-		}
-
-		gameManager.SetActive (false);
-        sceneChange.SetActive (false);
-    }
+    private bool gameStart;
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
 		if (gameStart) {
 
-			StartCoroutine (FadeOut ());
-			Invoke ("RotateCamera", 2.0f);
-			SwitchCamera ();
-		}
+            sceneFader.FadeTo();
+            Invoke("ChangeScene", 1.8f);
+        }
     }
-	// Starts the game and turns the camera pointing to the player
-	public void PlayGame () {
+    void ChangeScene() {
+
+        SceneManager.LoadScene(loadScene);
+    }
+    // Starts the game and turns the camera pointing to the player
+    public void PlayGame () {
 
 		gameStart = true;
 	}
@@ -51,55 +30,5 @@ public class MainMenu : MonoBehaviour
 
 		Application.Quit ();
 		print ("Quit");
-	}
-	// Rotate Camera
-	void RotateCamera () {
-
-		menuCam.transform.eulerAngles = Vector3.MoveTowards(menuCam.transform.eulerAngles, rotateToward, Time.time * 100.0f);
-	}
-	// Switches the menuCam to playerCam
-	void SwitchCamera () {
-
-		float yAxis = menuCam.transform.eulerAngles.y;
-
-		if (yAxis >= 179.5f) {
-			
-			menuCam.SetActive (false);
-			gameManager.SetActive (true);
-            sceneChange.SetActive (true);
-            StartCoroutine (FadeIn ());
-		}
-	}
-	// Fades texts in when game begins
-	IEnumerator FadeIn () {
-			
-		float t = 1f;
-
-		while (t > 0f) {
-
-			t -= Time.deltaTime * 0.5f;
-			float a = curve.Evaluate (t);
-
-			for (int i = 0; i < gameUIs.Length; i++)
-				gameUIs[i].color = new Color (1f, 1f, 1f,a);
-			
-			yield return 0;
-		}
-	}
-	// Fades texts out when game begins
-	IEnumerator FadeOut () {
-
-		float t = 0f;
-
-		while (t < 1f) {
-
-			t += Time.deltaTime * 0.5f;
-			float a = curve.Evaluate (t);
-
-			for (int i = 0; i < mainMenuUIs.Length; i++)
-				mainMenuUIs[i].color = new Color (1f, 1f, 1f,a);
-			
-			yield return 0;
-		}
 	}
 }
