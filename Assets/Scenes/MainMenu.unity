@@ -3114,7 +3114,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 2059206159}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 164f54b16b86674469f0ddbaa4049d4f, type: 3}
   m_Name: 
@@ -3609,6 +3609,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1048588821473362, guid: c607019a76d36854fb1e445a9be8b560, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4706468500333126, guid: c607019a76d36854fb1e445a9be8b560, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -3643,7 +3647,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 114344566917273390, guid: c607019a76d36854fb1e445a9be8b560, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114344566917273390, guid: c607019a76d36854fb1e445a9be8b560, type: 3}
       propertyPath: curve.m_Curve.Array.data[0].time
@@ -3663,11 +3667,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 114344566917273390, guid: c607019a76d36854fb1e445a9be8b560, type: 3}
       propertyPath: curve.m_Curve.Array.data[0].inSlope
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114344566917273390, guid: c607019a76d36854fb1e445a9be8b560, type: 3}
       propertyPath: curve.m_Curve.Array.data[1].inSlope
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114344566917273390, guid: c607019a76d36854fb1e445a9be8b560, type: 3}
       propertyPath: curve.m_Curve.Array.data[0].inWeight
@@ -3675,7 +3679,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 114344566917273390, guid: c607019a76d36854fb1e445a9be8b560, type: 3}
       propertyPath: curve.m_Curve.Array.data[0].outSlope
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114344566917273390, guid: c607019a76d36854fb1e445a9be8b560, type: 3}
       propertyPath: curve.m_Curve.Array.data[1].inWeight
@@ -3683,7 +3687,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 114344566917273390, guid: c607019a76d36854fb1e445a9be8b560, type: 3}
       propertyPath: curve.m_Curve.Array.data[1].outSlope
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114344566917273390, guid: c607019a76d36854fb1e445a9be8b560, type: 3}
       propertyPath: curve.m_Curve.Array.data[0].outWeight
@@ -3695,11 +3699,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 114344566917273390, guid: c607019a76d36854fb1e445a9be8b560, type: 3}
       propertyPath: curve.m_Curve.Array.data[0].tangentMode
-      value: 0
+      value: 34
       objectReference: {fileID: 0}
     - target: {fileID: 114344566917273390, guid: c607019a76d36854fb1e445a9be8b560, type: 3}
       propertyPath: curve.m_Curve.Array.data[1].tangentMode
-      value: 0
+      value: 34
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c607019a76d36854fb1e445a9be8b560, type: 3}

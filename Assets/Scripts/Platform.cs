@@ -45,7 +45,7 @@ public class Platform : MonoBehaviour {
 	// Moves the platform to the designated locations
 	void Move () {
 
-		transform.position = Vector3.MoveTowards (transform.position, moveToward [currentPoint], moveSpeed * Time.deltaTime);
+		transform.position = Vector3.MoveTowards (transform.position, moveToward [currentPoint], moveSpeed * Time.fixedDeltaTime);
 
 		if (Vector3.Distance (transform.position, moveToward [currentPoint]) < 0.2f) {
 
