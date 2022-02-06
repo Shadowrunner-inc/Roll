@@ -1,25 +1,37 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class Timer : MonoBehaviour {
 
 	PlayerController playerControl;
+    static Timer instance;
 
-	public TextMeshProUGUI timerText;
+    [Header("UI Texts")]
+    public TextMeshProUGUI timerText;
 	public TextMeshProUGUI counterText;
-
+    // Checks if players has completed the level
 	static public float time;
 	static public bool LvlComplete;
 	private float delayTime = 3.6f;
 	public float moreDelayTime;
+
 	private float startTime;
 
-	// Allows to continue the timer to the next scene
-	void Awake () {
-		
-		DontDestroyOnLoad(this);
-	}
+    // Allows to continue the timer to the next scene
+    void Awake () {
+
+        if (instance != this)
+        {
+            if (instance != null)
+            {
+                Destroy(instance.gameObject);
+                print("fail");
+            }
+            DontDestroyOnLoad(gameObject);
+            instance = this;
+            print("pass");
+        }
+    }
 	// Use this for initialization
 	void Start () {
 		// Must make LvlComplete false at beginning of every level
