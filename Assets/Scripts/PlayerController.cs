@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour {
 			rotatedDir = rotatedDir.normalized * dir.magnitude;
 
 			//If time scale is lower than 1 then speed up the player by the adjusted time.
-			rb.AddForce((Time.timeScale <= 1f) ? (rotatedDir * movementSpeed * Time.unscaledDeltaTime) : (rotatedDir * movementSpeed * Time.unscaledDeltaTime * SlowmotionSpeedAdjustment));
+			rb.AddForce((Time.timeScale <= 1f) ? (rotatedDir * movementSpeed * Time.unscaledDeltaTime*100) : (rotatedDir * movementSpeed * Time.unscaledDeltaTime * SlowmotionSpeedAdjustment*100));
 
 			
 		}

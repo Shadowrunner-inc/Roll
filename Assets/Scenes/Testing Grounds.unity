@@ -2841,7 +2841,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &681331834
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5481,7 +5481,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 114611616179376232, guid: e5f7c35109afec243898cc6be2f3e197, type: 3}
       propertyPath: movementSpeed
-      value: 800
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 114611616179376232, guid: e5f7c35109afec243898cc6be2f3e197, type: 3}
       propertyPath: SlowmotionSpeedAdjustment
@@ -5663,7 +5663,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1530222752}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9936ece4591273f428a663496d869e30, type: 3}
   m_Name: 
@@ -5686,7 +5686,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1535218497
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5699,40 +5699,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 742b4660e48f2334c93f9bc5592886b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainMenuUIs:
-  - {fileID: 672812027}
-  - {fileID: 657144190}
-  gameUIs:
-  - {fileID: 79383349}
-  - {fileID: 175641628}
-  curve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: -1
-      outSlope: -1
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: -1
-      outSlope: -1
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  gameManager: {fileID: 1656974018}
-  menuCam: {fileID: 777235430}
-  rotateToward: {x: 26.565, y: 180, z: 0}
-  sceneChange: {fileID: 1869506586}
+  loadScene: 
+  sceneFader: {fileID: 0}
 --- !u!4 &1535218498
 Transform:
   m_ObjectHideFlags: 0
@@ -6642,11 +6610,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 164f54b16b86674469f0ddbaa4049d4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1869506586 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1388699852280174, guid: 878eb3bfc0a2089499b32ba842280f3b, type: 3}
-  m_PrefabInstance: {fileID: 630829867}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1870460528
 GameObject:
   m_ObjectHideFlags: 0
