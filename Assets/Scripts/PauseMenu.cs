@@ -4,7 +4,8 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour {
 
 	public GameObject ui;
-	
+	[SerializeField] int mainMenuIndex;
+
 	// Update is called once per frame
 	void Update () {
 
@@ -34,7 +35,9 @@ public class PauseMenu : MonoBehaviour {
 	}
 
 	public void Menu () {
-
+		Toggle();
+		//SceneManager.LoadScene(mainMenuIndex);
 		print ("menu");
 	}
+	public void QuitGame() { Application.Quit(); }
 }
