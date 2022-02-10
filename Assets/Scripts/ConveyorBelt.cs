@@ -7,7 +7,26 @@ public class ConveyorBelt : MonoBehaviour
 {
     [SerializeField] private float speed = 5f;
     private Rigidbody _Rigi;
-    // Start is called before the first frame update
+
+    void Awake()
+    {
+        //Subscribe to gameStateManager's state change event
+        GameStateManager.instance.OnGameStateChange += OnGameStateChanged;
+    }
+
+    private void OnDestroy()
+    {
+        //Unsubscribe to gameStateManager's state change event
+        GameStateManager.instance.OnGameStateChange -= OnGameStateChanged;
+    }
+
+    private void OnGameStateChanged(GameState newGameState)
+    {
+        //assign the scripts enabled to the current gamestate
+        enabled = newGameState == GameState.Gameplay;
+    }
+
+    // Start is called before the first frame update  
     void Start()
     {
         _Rigi = GetComponent<Rigidbody>();
