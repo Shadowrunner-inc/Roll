@@ -18,8 +18,9 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
+  m_CustomRenderQueue: 2000
+  stringTagMap:
+    RenderType: Opaque
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
@@ -68,6 +69,7 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - _AOEnable: 0
     - _AOPower: 0
@@ -110,7 +112,7 @@ Material:
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
-    - _OtherSettings: 0
+    - _OtherSettings: 1
     - _Parallax: 0.02
     - _RealtimeShadow: 0
     - _RimEnable: 0
@@ -133,12 +135,12 @@ Material:
     - _ShowAmbientSettings: 0
     - _ShowBack: 1
     - _ShowBottom: 1
-    - _ShowColorCorrection: 0
-    - _ShowCustomShading: 0
-    - _ShowFog: 0
+    - _ShowColorCorrection: 1
+    - _ShowCustomShading: 1
+    - _ShowFog: 1
     - _ShowFront: 1
     - _ShowGlobalGradientSettings: 0
-    - _ShowLMap: 0
+    - _ShowLMap: 1
     - _ShowLeft: 1
     - _ShowRight: 1
     - _ShowTexture: 0
@@ -184,3 +186,4 @@ Material:
     - _RimColor: {r: 1, g: 1, b: 1, a: 1}
     - _ShadowColor: {r: 0.1, g: 0.1, b: 0.1, a: 1}
     - _TintColor: {r: 1, g: 1, b: 1, a: 1}
+  m_BuildTextureStacks: []
