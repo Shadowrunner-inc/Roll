@@ -31,7 +31,23 @@ public class Timer : MonoBehaviour {
             instance = this;
             print("pass");
         }
-    }
+
+		//Subscribe to gameStateManager's state change event
+		GameStateManager.instance.OnGameStateChange += OnGameStateChanged;
+	}
+
+	private void OnDestroy()
+	{
+		//Unsubscribe to gameStateManager's state change event
+		GameStateManager.instance.OnGameStateChange -= OnGameStateChanged;
+	}
+
+	private void OnGameStateChanged(GameState newGameState)
+	{
+		//assign the scripts enabled to the current gamestate
+		enabled = newGameState == GameState.Gameplay;
+	}
+
 	// Use this for initialization
 	void Start () {
 		// Must make LvlComplete false at beginning of every level
