@@ -20,7 +20,7 @@ public class PauseMenu : MonoBehaviour {
 	}
 
     private void OnGameStateChanged(GameState newGameState) {
-		gameObject.SetActive(newGameState == GameState.Paused);
+		//gameObject.SetActive(newGameState == GameState.Paused);
 		Reset();
 		mainPanel.gameObject.SetActive(newGameState == GameState.Paused);
 		
