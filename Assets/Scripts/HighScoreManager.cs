@@ -16,10 +16,10 @@ public class HighScoreManager : MonoBehaviour
         //bestTimeT.text = PlayerPrefs.GetFloat( _SceneName + " Best Time: ", 0).ToString();
     }
 
-   /*private void Update()
+   /* private void Update()
     {
-      if (Input.GetKeyDown(KeyCode.G)) UpdateScore(_SceneName);
-      if (Input.GetKeyDown(KeyCode.C)) ClearAllScores();
+        if (Input.GetKeyDown(KeyCode.G)) UpdateScore(_SceneName);
+        if (Input.GetKeyDown(KeyCode.C)) ClearAllScores();
     }*/
 
     public static void UpdateScore(string sceneName)
@@ -30,15 +30,17 @@ public class HighScoreManager : MonoBehaviour
             PlayerPrefs.SetFloat(sceneName + " Time: ", /*Timer.time*/ Timer.time);
             //print(PlayerPrefs.GetFloat(sceneName + ": ", 0).ToString());
         }
+       
     }
 
     public static void ClearAllScores() {
+
+
         for (int s = UnityEngine.SceneManagement.SceneManager.sceneCount; s > 0; s--)
         {
-            string sceneName = UnityEngine.SceneManagement.SceneManager.GetSceneAt(s - 1).name;
-            PlayerPrefs.SetFloat(sceneName + " Time: ", 9000f);
+            string sceneName = UnityEngine.SceneManagement.SceneManager.GetSceneAt(s-1).name;
+            PlayerPrefs.SetFloat(sceneName + " Time: ", 9000f); 
         }
-    }
 
-    public static float GetScore(string sceneName) { return PlayerPrefs.GetFloat(sceneName + " Time: ", 800.0f); }
+    }
 }
