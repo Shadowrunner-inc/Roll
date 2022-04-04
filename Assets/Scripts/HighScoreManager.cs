@@ -41,4 +41,21 @@ public class HighScoreManager : MonoBehaviour
     }
 
     public static float GetScore(string sceneName) { return PlayerPrefs.GetFloat(sceneName + " Time: ", 800.0f); }
+
+    public static List<string> GetAllScores() {
+        List<string> Scores = new List<string>();
+        
+        for (int s = UnityEngine.SceneManagement.SceneManager.sceneCount; s > 0; s--)
+        {
+            string sceneName = UnityEngine.SceneManagement.SceneManager.GetSceneAt(s - 1).name;
+            float score = PlayerPrefs.GetFloat(sceneName + " Time: ", 9000f);
+
+            if (score > 0.0f)
+            {
+                Scores.Add(sceneName + " Time: " + score);
+            }
+        }
+
+        return Scores;
+    }
 }
