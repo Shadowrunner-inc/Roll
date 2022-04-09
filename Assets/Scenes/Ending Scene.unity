@@ -454,6 +454,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 517171648}
+        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+        m_MethodName: Quit
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &46126336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -789,7 +801,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &196348744
 GameObject:
@@ -1225,7 +1237,7 @@ Transform:
   - {fileID: 1136921928}
   - {fileID: 969870947}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &517171642
 GameObject:
@@ -1240,6 +1252,7 @@ GameObject:
   - component: {fileID: 517171645}
   - component: {fileID: 517171644}
   - component: {fileID: 517171647}
+  - component: {fileID: 517171648}
   m_Layer: 5
   m_Name: Replay Button
   m_TagString: Untagged
@@ -1315,6 +1328,18 @@ MonoBehaviour:
       - m_Target: {fileID: 517171647}
         m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
         m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 517171648}
+        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+        m_MethodName: PlayGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1458,6 +1483,20 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &517171648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 517171642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 742b4660e48f2334c93f9bc5592886b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loadScene: Level 1
+  sceneFader: {fileID: 2059206160}
 --- !u!1001 &517619044
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2450,7 +2489,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 315249229}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.4686044
+  m_Size: 0.46860433
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2558,7 +2597,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &844034123
 GameObject:
@@ -3829,7 +3868,7 @@ RectTransform:
   - {fileID: 46126333}
   - {fileID: 2076677355}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -4151,37 +4190,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1464807987}
   m_Mesh: {fileID: 4300014, guid: 243c24d122b9c3845b770b9fc95effa4, type: 3}
---- !u!1 &1535218496
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1535218498}
-  m_Layer: 0
-  m_Name: Main Menu
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1535218498
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1535218496}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1589252446
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5391,6 +5399,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c607019a76d36854fb1e445a9be8b560, type: 3}
+--- !u!114 &2059206160 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114344566917273390, guid: c607019a76d36854fb1e445a9be8b560, type: 3}
+  m_PrefabInstance: {fileID: 2059206159}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 164f54b16b86674469f0ddbaa4049d4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2076677354
 GameObject:
   m_ObjectHideFlags: 0
@@ -5403,7 +5422,6 @@ GameObject:
   - component: {fileID: 2076677359}
   - component: {fileID: 2076677358}
   - component: {fileID: 2076677357}
-  - component: {fileID: 2076677356}
   m_Layer: 5
   m_Name: Scroll View
   m_TagString: Untagged
@@ -5434,19 +5452,6 @@ RectTransform:
   m_AnchoredPosition: {x: 4.0638, y: 13.0094}
   m_SizeDelta: {x: 366.9672, y: 157.5813}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2076677356
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2076677354}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f682d65dc7ff104c91985d858eb4e22, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  levelName: 
 --- !u!114 &2076677357
 MonoBehaviour:
   m_ObjectHideFlags: 0
