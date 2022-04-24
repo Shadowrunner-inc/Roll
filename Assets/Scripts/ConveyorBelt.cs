@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class ConveyorBelt : MonoBehaviour
 {
-    [SerializeField] private float speed = 5f;
+    [SerializeField] private float speed = 10f;
     private Rigidbody _Rigi;
 
     void Awake()
@@ -37,7 +37,7 @@ public class ConveyorBelt : MonoBehaviour
     {
         Vector3 pos = _Rigi.position;
 
-        _Rigi.position += Vector3.back * speed * Time.fixedDeltaTime;
+        _Rigi.position += Vector3.forward * speed * Time.fixedDeltaTime;
         _Rigi.MovePosition(pos);
     }
 }
