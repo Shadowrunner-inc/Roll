@@ -9,6 +9,6 @@ public class DisplayTime : MonoBehaviour
 
     void Start()
     {
-        GetComponent<TMPro.TMP_Text>().text = levelName + " Time: " + HighScoreManager.GetScore(levelName);
+        GetComponent<TMPro.TMP_Text>().text ="Best Time: " + HighScoreManager.GetScore(levelName);
     }
 }
