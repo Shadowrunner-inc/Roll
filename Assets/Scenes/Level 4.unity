@@ -16620,7 +16620,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!135 &531463435
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -36374,10 +36374,8 @@ MonoBehaviour:
   m_VersionIndex: 49153
   m_IsSelectable: 1
   m_SelectedFaces: 
-  m_SelectedEdges:
-  - a: 342
-    b: 343
-  m_SelectedVertices: 5601000057010000
+  m_SelectedEdges: []
+  m_SelectedVertices: 
 --- !u!114 &912375843
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40033,6 +40031,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2007982293}
     m_Modifications:
+    - target: {fileID: 1001527320, guid: 1f4524882a0b7e542902ac99c95c127a, type: 3}
+      propertyPath: scrollY
+      value: -0.35
+      objectReference: {fileID: 0}
     - target: {fileID: 928594085942407312, guid: 1f4524882a0b7e542902ac99c95c127a, type: 3}
       propertyPath: m_Name
       value: Conveyor Belt (1)

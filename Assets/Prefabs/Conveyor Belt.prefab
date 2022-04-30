@@ -112,6 +112,7 @@ GameObject:
   - component: {fileID: 928594085942407533}
   - component: {fileID: 928594085942407314}
   - component: {fileID: 928594085942407315}
+  - component: {fileID: 1001527320}
   m_Layer: 0
   m_Name: Conveyor Belt
   m_TagString: Untagged
@@ -228,6 +229,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
+--- !u!114 &1001527320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 928594085942407312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 603849127a8e8984c89cc2acd060d945, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scrollX: 0
+  scrollY: -0.35
 --- !u!1 &6969247951736208550
 GameObject:
   m_ObjectHideFlags: 0
