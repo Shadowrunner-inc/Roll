@@ -21,6 +21,7 @@ public class Platform : MonoBehaviour {
 
 	[Header ("Hidden Platform")]
 	public bool hide;
+    public GameObject sceneChangePortal;
 
 	private MeshRenderer rend;
 
@@ -32,7 +33,9 @@ public class Platform : MonoBehaviour {
 			
 			rend = GetComponent<MeshRenderer> ();
 			rend.enabled = false;
-		}
+            sceneChangePortal.SetActive(false);
+
+        }
 	}
 
 	void FixedUpdate () {
@@ -75,7 +78,10 @@ public class Platform : MonoBehaviour {
 			player.transform.parent = gameObject.transform;
 		// Reveals hidden platform when player collide with the object
 		if (other.gameObject.tag == "Player" && hide)
-			rend.enabled = true;
+        {
+            rend.enabled = true;
+            sceneChangePortal.SetActive(true);
+        }
 	}
 
 	void OnCollisionExit (Collision other) {
