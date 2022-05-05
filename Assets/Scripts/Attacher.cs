@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Attacher : MonoBehaviour
 {
-    [SerializeField] Transform oAnchor; //the Transform you want the object to parent too.
+    [SerializeField] Transform mAnchor; //the Transform you want the object to parent too.
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            other.transform.parent.SetParent(oAnchor);
+            other.transform.parent.SetParent(mAnchor);
         }
     }
 
