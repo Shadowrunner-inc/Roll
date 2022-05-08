@@ -25,8 +25,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5279793445736806738}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 25, z: 0}
+  m_LocalPosition: {x: -120.5, y: 25, z: -117}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -51,7 +52,15 @@ MonoBehaviour:
   rotateSpeed: 5
   rotateToward: {x: 0, y: 0, z: 0}
   spawn: 1
-  projectiles: []
-  size: {x: 5, y: 2, z: 5}
+  projectiles:
+  - {fileID: 1288633026, guid: f1672de2037297e4c9c450fb4b16d534, type: 3}
+  - {fileID: 431352896882160859, guid: a384965b4acdc7b419147849b5bdcd33, type: 3}
+  size: {x: 3, y: 2, z: 4}
   spawnDuration: 3
-  spawnCooldown: 2.5
+  spawnCooldown: 1.8
+  shoot: 0
+  cannonBall: {fileID: 0}
+  targetLocation: {fileID: 0}
+  force: 0
+  shootSpawnTime: 3
+  shootCooldown: 2

@@ -22,6 +22,7 @@ namespace Minimalist
 			_Exponent = FindProperty("_Exponent", _props);
 			_DirX = FindProperty("_DirX", _props);
 			_DirY = FindProperty("_DirY", _props);
+			_UpVector = FindProperty("_UpVector", _props);
 		}
 
 		public override void OnGUI(MaterialEditor materialEditor, MaterialProperty[] properties)
@@ -35,41 +36,14 @@ namespace Minimalist
 				materialEditor.FloatProperty(_Intensity, "Intensity");
 				materialEditor.FloatProperty(_Exponent, "Exponent");
 
-				EditorGUI.BeginDisabledGroup(true);
-				{
-					materialEditor.RangeProperty(_DirY, "Pitch");
-					materialEditor.RangeProperty(_DirX, "Yaw");
-				}
-				EditorGUI.EndDisabledGroup();
-				
-				EditorGUILayout.HelpBox("Some Features are not available in the free version of Minimalist", MessageType.Warning);
-            
-				if (GUILayout.Button("Get the full fersion of Minimalist"))
-				{
-					Application.OpenURL("https://assetstore.unity.com/packages/vfx/shaders/minimalist-lowpoly-flat-gradient-shader-91366");
-				}
-            
-            
-				EditorGUILayout.BeginHorizontal();
-				{
-                
-					if (GUILayout.Button("Forum"))
-					{
-						Application.OpenURL("https://forum.unity.com/threads/minimalist-lowpoly-gradient-shader.478507");
-					}
-                
-					if (GUILayout.Button("Email"))
-					{
-						Application.OpenURL("mailto://isfaqrahman98@gmail.com");
-					}
-                
-					if (GUILayout.Button("Rate/Review"))
-					{
-						Application.OpenURL("https://assetstore.unity.com/packages/vfx/shaders/minimalist-free-lowpoly-flat-gradient-shader-96148");
-					}
-				}
-            
-				EditorGUILayout.EndHorizontal();
+				materialEditor.RangeProperty(_DirY, "Pitch");
+				materialEditor.RangeProperty(_DirX, "Yaw");
+
+				float x = _DirX.floatValue * Mathf.Deg2Rad;
+				float y = _DirY.floatValue * Mathf.Deg2Rad;
+
+				_UpVector.vectorValue = new Vector4(Mathf.Sin(y) * Mathf.Sin(x), Mathf.Cos(y),
+					Mathf.Sin(y) * Mathf.Cos(x), 0.0f);
 			}
 			if (EditorGUI.EndChangeCheck())
 			{

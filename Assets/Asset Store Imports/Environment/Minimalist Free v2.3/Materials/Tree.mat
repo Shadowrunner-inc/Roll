@@ -129,16 +129,18 @@ Material:
     - _Shading_L: 1
     - _Shading_R: 1
     - _Shading_T: 1
+    - _ShadowBlend: 0.5
+    - _ShadowInfluence: 0.5
     - _ShowAO: 0
     - _ShowAmbientSettings: 0
     - _ShowBack: 1
     - _ShowBottom: 1
     - _ShowColorCorrection: 0
-    - _ShowCustomShading: 0
+    - _ShowCustomShading: 1
     - _ShowFog: 0
     - _ShowFront: 1
     - _ShowGlobalGradientSettings: 0
-    - _ShowLMap: 0
+    - _ShowLMap: 1
     - _ShowLeft: 1
     - _ShowRight: 1
     - _ShowTexture: 0
@@ -149,6 +151,7 @@ Material:
     - _UVSec: 0
     - _UnityFogEnable: 0
     - _ZWrite: 1
+    - _ZWriteOverride: 0
     m_Colors:
     - _AOColor: {r: 1, g: 1, b: 1, a: 1}
     - _AmbientColor: {r: 0, g: 0, b: 0, a: 0}

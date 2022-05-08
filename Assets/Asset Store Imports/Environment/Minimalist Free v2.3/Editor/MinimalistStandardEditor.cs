@@ -19,7 +19,7 @@ namespace Minimalist
         {
             VertexColor,
             SolidColor,
-            GradientProOnly
+            Gradient
         }
 
         public enum GradientSettings
@@ -60,6 +60,11 @@ namespace Minimalist
             Back
         }
 
+        public enum ZWrite
+        {
+            Off, On
+        }
+
         public enum Mode
         {
             Opaque,
@@ -87,6 +92,15 @@ namespace Minimalist
         bool showRightShading;
         bool showTopShading;
         bool showBottomShading;
+
+        public bool ZWriteOverride
+        {
+            get
+            {
+                return _ZWriteOverride.floatValue == 1;
+            }
+            set { _ZWriteOverride.floatValue = value? 1f : 0f; }
+        }
 
         private bool ShowTexture
         {
@@ -551,6 +565,12 @@ namespace Minimalist
             set { _Cull.floatValue = (float) value; }
         }
 
+        private ZWrite zWrite
+        {
+            get { return (ZWrite) _ZWrite.floatValue; }
+            set { _ZWrite.floatValue = (float) value; }
+        }
+
         private Mode blendingMode
         {
             get { return (Mode) _Mode.floatValue; }
@@ -703,8 +723,10 @@ namespace Minimalist
 
         MaterialProperty _ShowGlobalGradientSettings, _GradientHeight_G, _GradPivot_G, _Rotation_G, _OtherSettings;
         MaterialProperty _ShowAmbientSettings, _AmbientColor, _AmbientPower;
-        MaterialProperty _RealtimeShadow, _ShadowColor;
-        MaterialProperty _GradientSpace, _DontMix, _Cull, _Mode, _Fade;
+        MaterialProperty _RealtimeShadow, _ShadowColor, _ShadowInfluence, _ShadowBlend;
+        MaterialProperty _GradientSpace, _DontMix, _Cull, _Mode, _Fade, _ZWriteOverride;
+
+        private MaterialProperty _ZWrite;
 
         #endregion
 
@@ -712,19 +734,9 @@ namespace Minimalist
 
         #region GUIStyles
 
-        private readonly GUIStyle Indented = new GUIStyle()
-        {
-            padding = new RectOffset(10, 0, 0, 0)
-        };
-
-        private readonly GUIStyle HeaderStyle = new GUIStyle("box")
-        {
-            fontSize = EditorStyles.boldLabel.fontSize,
-            fontStyle = EditorStyles.boldLabel.fontStyle,
-            font = EditorStyles.boldLabel.font,
-            alignment = TextAnchor.UpperLeft,
-            padding = new RectOffset(10, 0, 2, 0),
-        };
+        private bool GUIStylesInitialized = false;
+        private GUIStyle Indented;
+        private GUIStyle HeaderStyle;
 
         #endregion
 
@@ -736,6 +748,7 @@ namespace Minimalist
         bool drawGradintGizmo, drawRotationGizmo, deawFogGizmo;
         Event guiEvent;
         public static MinimalistClipboard MClipboard;
+        private Quaternion previousObjectRotation, previousCameraRotation;
 
         public void UndoRedoPerformed(MaterialProperty[] _props)
         {
@@ -854,12 +867,17 @@ namespace Minimalist
 
             _RealtimeShadow = FindProperty("_RealtimeShadow", _props);
             _ShadowColor = FindProperty("_ShadowColor", _props);
+            _ShadowInfluence = FindProperty("_ShadowInfluence", _props);
+            _ShadowBlend = FindProperty("_ShadowBlend", _props);
 
             _GradientSpace = FindProperty("_GradientSpace", _props);
             _DontMix = FindProperty("_DontMix", _props);
             _Cull = FindProperty("_Cull", _props);
             _Mode = FindProperty("_Mode", _props);
             _Fade = FindProperty("_Fade", _props);
+            _ZWriteOverride = FindProperty("_ZWriteOverride", _props);
+
+            _ZWrite = FindProperty("_ZWrite", _props);
 
             RecorderProps = new Dictionary<string, MaterialProperty>();
             RecorderProps.Add(_GradientHeight_F.name, _GradientHeight_F);
@@ -908,6 +926,9 @@ namespace Minimalist
             if (_ShowBottom.floatValue == 0) showBottomShading = false;
             else if (_ShowBottom.floatValue == 1) showBottomShading = true;
 
+            if (_ZWriteOverride.floatValue == 0) ZWriteOverride = false;
+            else if (_ZWriteOverride.floatValue == 1) ZWriteOverride = true;
+
             frontShadingMode = (ShadingMode) _Shading_F.floatValue;
             backShadingMode = (ShadingMode) _Shading_B.floatValue;
             leftShadingMode = (ShadingMode) _Shading_L.floatValue;
@@ -925,7 +946,7 @@ namespace Minimalist
 
         void InitializeGradientSpace(Material mat)
         {
-            if (mat.shader.name.Contains("LocalSpace"))
+            if (mat.shader.name.ToLower().Contains("localspace"))
             {
                 gSpace = GradientSpace.LocalSpace;
             }
@@ -958,7 +979,24 @@ namespace Minimalist
             }
         }
 
-        private bool firstTimeApply = true;
+        void InitializeGUIStyles()
+        {
+            Indented = new GUIStyle()
+            {
+                padding = new RectOffset(10, 0, 0, 0)
+            };
+            
+            HeaderStyle = new GUIStyle("box")
+            {
+                fontSize = EditorStyles.boldLabel.fontSize,
+                fontStyle = EditorStyles.boldLabel.fontStyle,
+                font = EditorStyles.boldLabel.font,
+                alignment = TextAnchor.UpperLeft,
+                padding = new RectOffset(10, 0, 2, 0),
+            };
+
+            GUIStylesInitialized = true;
+        }
 
         public override void OnGUI(MaterialEditor materialEditor, MaterialProperty[] properties)
         {
@@ -967,12 +1005,14 @@ namespace Minimalist
             InitializeMatProps(properties);
             InitializeHelperVars();
             InitializeGradientSpace(targetMat);
-            //InitializeClipboard();
+            InitializeClipboard();
+            if(!GUIStylesInitialized) InitializeGUIStyles();
+            
             HeaderStyle.normal.background = GUI.skin.GetStyle("ShurikenModuleTitle").normal.background;
 
             EditorGUI.BeginChangeCheck();
             {
-                EditorGUILayout.BeginVertical(GUILayout.Width(Screen.width - 34));
+                EditorGUILayout.BeginVertical(GUILayout.ExpandWidth(true));
                 {
                     //Texture Module
                     ShowTexture = GUILayout.Toggle(ShowTexture, "Main Texture", HeaderStyle, GUILayout.Height(20),
@@ -1036,6 +1076,7 @@ namespace Minimalist
                     ShowOtherSettings = GUILayout.Toggle(ShowOtherSettings, "Other Settings", HeaderStyle,
                         GUILayout.Height(20), GUILayout.ExpandWidth(true));
                     if (ShowOtherSettings) OtherSettings();
+                    Promo();
                 }
                 EditorGUILayout.EndVertical();
 
@@ -1045,42 +1086,6 @@ namespace Minimalist
             {
                 UndoRedoPerformed(properties);
             }
-            
-            EditorGUILayout.HelpBox("Some Features are not available in the free version of Minimalist", MessageType.Warning);
-            
-            if (GUILayout.Button("Get the full fersion of Minimalist"))
-            {
-                Application.OpenURL("https://assetstore.unity.com/packages/vfx/shaders/minimalist-lowpoly-flat-gradient-shader-91366");
-            }
-            
-            
-            EditorGUILayout.BeginHorizontal();
-            {
-                
-                if (GUILayout.Button("Forum"))
-                {
-                    Application.OpenURL("https://forum.unity.com/threads/minimalist-lowpoly-gradient-shader.478507");
-                }
-                
-                if (GUILayout.Button("Email"))
-                {
-                    Application.OpenURL("mailto://isfaqrahman98@gmail.com");
-                }
-                
-                if (GUILayout.Button("Rate/Review"))
-                {
-                    Application.OpenURL("https://assetstore.unity.com/packages/vfx/shaders/minimalist-free-lowpoly-flat-gradient-shader-96148");
-                }
-            }
-            
-            EditorGUILayout.EndHorizontal();
-            
-        }
-
-        private void OnClosed()
-        {
-            Debug.Log("Closed");
-            SceneView.onSceneGUIDelegate -= SceneGUI;
         }
 
         private void TextureModule()
@@ -1125,24 +1130,25 @@ namespace Minimalist
                     targetMat.DisableKeyword(shaderKeywordG);
                     targetMat.EnableKeyword(shaderKeywordS);
                 }
-                else if (ShadingType == ShadingMode.GradientProOnly)
+                else if (ShadingType == ShadingMode.Gradient)
                 {
-                    targetMat.EnableKeyword(shaderKeywordS);
+                    EditorGUI.BeginDisabledGroup(true);
+                    targetMat.EnableKeyword(shaderKeywordS); // Fallback to Solid shading
+                    //targetMat.EnableKeyword(shaderKeywordG);
+                    //targetMat.DisableKeyword(shaderKeywordS);
                     EditorGUILayout.BeginHorizontal("Box");
                     {
                         EditorGUILayout.BeginVertical(GUILayout.Width(50));
                         {
-                            EditorGUI.BeginDisabledGroup(true);
-                                Color1.colorValue = EditorGUILayout.ColorField(Color1.colorValue);
-                                Color2.colorValue = EditorGUILayout.ColorField(Color2.colorValue);
-                                
-                                if (GUILayout.Button("Swap"))
-                                {
-                                    Color temp = Color1.colorValue;
-                                    Color1.colorValue = Color2.colorValue;
-                                    Color2.colorValue = temp;
-                                }
-                            EditorGUI.EndDisabledGroup();
+                            Color1.colorValue = EditorGUILayout.ColorField(Color1.colorValue);
+                            Color2.colorValue = EditorGUILayout.ColorField(Color2.colorValue);
+                            if (GUILayout.Button("Swap"))
+                            {
+                                Color temp = Color1.colorValue;
+                                Color1.colorValue = Color2.colorValue;
+                                Color2.colorValue = temp;
+                            }
+
                             Rect R = EditorGUILayout.GetControlRect(GUILayout.Height(50), GUILayout.Width(50));
 
                             if (ShadingSide == TOP || ShadingSide == DOWN)
@@ -1152,43 +1158,41 @@ namespace Minimalist
                         }
                         EditorGUILayout.EndVertical();
 
-                        EditorGUILayout.BeginVertical(GUILayout.Width(Screen.width - 112));
+                        EditorGUILayout.BeginVertical(GUILayout.Width(EditorGUIUtility.currentViewWidth - 112));
                         {
                             GradSettings = (GradientSettings) EditorGUILayout.EnumPopup("", GradSettings,
-                                GUILayout.Width(Screen.width - 110));
+                                GUILayout.Width(EditorGUIUtility.currentViewWidth - 110));
                             GradientSettings.floatValue = (float) GradSettings;
-                            
-                            EditorGUI.BeginDisabledGroup(true);
                             EditorGUI.BeginDisabledGroup(IsGlobal(GradSettings));
                             {
                                 EditorGUILayout.BeginHorizontal();
                                 {
-                                    EditorGUILayout.BeginVertical(GUILayout.Width(Screen.width - 142));
+                                    EditorGUILayout.BeginVertical(GUILayout.Width(EditorGUIUtility.currentViewWidth - 142));
                                     {
                                         if (IsGlobal(GradSettings))
                                         {
                                             GradHeight.floatValue =
                                                 EditorGUILayoutExtended.FloatField(new GUIContent("Falloff"),
                                                     _GradientHeight_G.floatValue, 70,
-                                                    GUILayout.Width(Screen.width - 142));
+                                                    GUILayout.Width(EditorGUIUtility.currentViewWidth - 142));
                                             EditorGUILayout.LabelField("Pivot", GUILayout.Width(60));
                                             GradPivot.vectorValue = EditorGUILayout.Vector2Field("",
-                                                _GradPivot_G.vectorValue, GUILayout.Width(Screen.width - 142));
+                                                _GradPivot_G.vectorValue, GUILayout.Width(EditorGUIUtility.currentViewWidth - 142));
                                             EditorGUILayout.LabelField("Rotation", GUILayout.Width(60));
                                             Rotation.floatValue = EditorGUILayout.Slider(_Rotation_G.floatValue, 0f,
-                                                360f, GUILayout.Width(Screen.width - 142));
+                                                360f, GUILayout.Width(EditorGUIUtility.currentViewWidth - 142));
                                         }
                                         else
                                         {
                                             GradHeight.floatValue =
                                                 EditorGUILayoutExtended.FloatField(new GUIContent("Falloff"),
-                                                    GradHeight.floatValue, 70, GUILayout.Width(Screen.width - 142));
+                                                    GradHeight.floatValue, 70, GUILayout.Width(EditorGUIUtility.currentViewWidth - 142));
                                             EditorGUILayout.LabelField("Pivot", GUILayout.Width(60));
                                             GradPivot.vectorValue = EditorGUILayout.Vector2Field("",
-                                                GradPivot.vectorValue, GUILayout.Width(Screen.width - 142));
+                                                GradPivot.vectorValue, GUILayout.Width(EditorGUIUtility.currentViewWidth - 142));
                                             EditorGUILayout.LabelField("Rotation", GUILayout.Width(60));
                                             Rotation.floatValue = EditorGUILayout.Slider(Rotation.floatValue, 0f, 360f,
-                                                GUILayout.Width(Screen.width - 142));
+                                                GUILayout.Width(EditorGUIUtility.currentViewWidth - 142));
                                         }
                                     }
                                     EditorGUILayout.EndVertical();
@@ -1202,12 +1206,10 @@ namespace Minimalist
                                                 GUILayout.Height(28)))
                                             {
                                                 selectedObject = Selection.activeGameObject.transform;
-                                                SceneView sc = (SceneView) SceneView.sceneViews[0];
-
                                                 ReDrawHandle:
                                                 if (gradientHandle == null)
                                                 {
-                                                    gradientHandle = new GradientHandle();
+                                                    gradientHandle = ScriptableObject.CreateInstance<GradientHandle>();
                                                     if (ShadingSide == TOP || ShadingSide == DOWN)
                                                     {
                                                         gradientHandle.pivot = new Vector3(GradPivot.vectorValue.x,
@@ -1254,19 +1256,12 @@ namespace Minimalist
                                                     gradientHandle.rotation = Rotation.name;
                                                     gradientHandle.profile = ShadingSide + "Gradient";
 
-                                                    //Camerawork
-                                                    sc.orthographic = true;
-                                                    if (ShadingSide == FRONT) sc.rotation = new Quaternion(0, 1, 0, 0);
-                                                    if (ShadingSide == BACK) sc.rotation = new Quaternion(0, 0, 0, 1);
-                                                    if (ShadingSide == TOP) sc.rotation = new Quaternion(1, 0, 0, 1);
-                                                    if (ShadingSide == DOWN) sc.rotation = new Quaternion(-1, 0, 0, 1);
-                                                    if (ShadingSide == LEFT) sc.rotation = new Quaternion(0, -1, 0, 1);
-                                                    if (ShadingSide == RIGHT) sc.rotation = new Quaternion(0, 1, 0, 1);
+                                                    AlignCameraToSelectedObject(ShadingSide);
 
 
                                                     //Start SceneView code
-                                                    SceneView.onSceneGUIDelegate -= SceneGUI;
-                                                    SceneView.onSceneGUIDelegate += SceneGUI;
+                                                    //SceneView.onSceneGUIDelegate -= SceneGUI;
+                                                    //SceneView.onSceneGUIDelegate += SceneGUI;
 
                                                 }
                                                 else
@@ -1274,6 +1269,7 @@ namespace Minimalist
                                                     if (gradientHandle.profile == ShadingSide + "Gradient")
                                                     {
                                                         gradientHandle = null;
+                                                        ResetCamera();
                                                     }
                                                     else
                                                     {
@@ -1319,11 +1315,11 @@ namespace Minimalist
                                 EditorGUILayout.EndHorizontal();
                             }
                             EditorGUI.EndDisabledGroup();
-                            EditorGUI.EndDisabledGroup();
                         }
                         EditorGUILayout.EndVertical();
                     }
                     EditorGUILayout.EndHorizontal();
+                    EditorGUI.EndDisabledGroup();
                 }
                 else
                 {
@@ -1344,19 +1340,30 @@ namespace Minimalist
             {
                 targetMat.EnableKeyword("AO_ON");
                 matEditor.TexturePropertySingleLine(new GUIContent("AO Map"), _AOTexture, _AOPower);
-                
-                EditorGUI.BeginDisabledGroup(true);
+                _AOPower.floatValue = 1;
                 EditorGUILayout.BeginHorizontal();
                 {
+                    EditorGUI.BeginDisabledGroup(true);
                     matEditor.ColorProperty(_AOColor, "AO Color");
+                    EditorGUI.EndDisabledGroup();
                     aouv = (AOuv) EditorGUILayout.EnumPopup(aouv);
                 }
                 EditorGUILayout.EndHorizontal();
-                EditorGUI.EndDisabledGroup();
+                if (aouv == AOuv.uv0)
+                {
+                    targetMat.EnableKeyword("AO_ON_UV0");
+                    targetMat.DisableKeyword("AO_ON_UV1");
+                }
+                else
+                {
+                    targetMat.DisableKeyword("AO_ON_UV0");
+                    targetMat.EnableKeyword("AO_ON_UV1");
+                }
             }
             else
             {
-                targetMat.DisableKeyword("AO_ON");
+                targetMat.DisableKeyword("AO_ON_UV0");
+                targetMat.DisableKeyword("AO_ON_UV1");
             }
         }
 
@@ -1368,27 +1375,31 @@ namespace Minimalist
                 lMapBlendMode = (LightMapBlendingMode) EditorGUILayout.EnumPopup("Mode", lMapBlendMode);
                 if (lMapBlendMode == LightMapBlendingMode.Add)
                 {
+                    EditorGUI.BeginDisabledGroup(true);
                     matEditor.RangeProperty(_LMPower, "Power");
+                    EditorGUI.EndDisabledGroup();
                     targetMat.EnableKeyword("LIGHTMAP_ADD");
                     targetMat.DisableKeyword("LIGHTMAP_MULTIPLY");
+                    targetMat.DisableKeyword("LIGHTMAP_AO");
                 }
                 else if (lMapBlendMode == LightMapBlendingMode.Multiply)
                 {
+                    EditorGUI.BeginDisabledGroup(false);
                     matEditor.RangeProperty(_LMPower, "Power");
+                    EditorGUI.EndDisabledGroup();
                     targetMat.EnableKeyword("LIGHTMAP_MULTIPLY");
                     targetMat.DisableKeyword("LIGHTMAP_ADD");
+                    targetMat.DisableKeyword("LIGHTMAP_AO");
                 }
 
                 if (lMapBlendMode == LightMapBlendingMode.UseAsAO)
                 {
-                    EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.HelpBox(
-                        "Turn of all lights in the scene and bake lightmap with AO turned on and ambient color set to WHITE under the environment lighting settings, in the lightmap baking window.",
+                        "Pro feature!\nTurn of all lights in the scene and bake lightmap with AO turned on and ambient color set to WHITE under the environment lighting settings, in the lightmap baking window.",
                         MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
                     matEditor.ColorProperty(_LMColor, "AO Color");
                     matEditor.RangeProperty(_LMPower, "Power");
-                    targetMat.DisableKeyword("LIGHTMAP_ADD");
-                    targetMat.DisableKeyword("LIGHTMAP_MULTIPLY");
                     EditorGUI.EndDisabledGroup();
                 }
             }
@@ -1396,18 +1407,17 @@ namespace Minimalist
             {
                 targetMat.DisableKeyword("LIGHTMAP_AO");
                 targetMat.DisableKeyword("LIGHTMAP_ADD");
+                targetMat.DisableKeyword("LIGHTMAP_MULTIPLY");
             }
         }
 
         private void GlobalGradientSettingsModule()
         {
-            
             ShowGlobalGradientSettings =
                 EditorGUILayout.Foldout(ShowGlobalGradientSettings, "Global Gradient Settings");
-            
-            EditorGUI.BeginDisabledGroup(true);
             if (ShowGlobalGradientSettings)
             {
+                EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.BeginVertical("box");
                 {
                     _GradientHeight_G.floatValue = EditorGUILayoutExtended.FloatField(new GUIContent("Falloff"),
@@ -1418,25 +1428,24 @@ namespace Minimalist
                     _Rotation_G.floatValue = EditorGUILayout.Slider(_Rotation_G.floatValue, 0f, 360f);
                 }
                 EditorGUILayout.EndVertical();
+                EditorGUI.EndDisabledGroup();
             }
-            EditorGUI.EndDisabledGroup();
         }
 
         private void AmbientSettingsModule()
         {
             ShowAmbientSettings = EditorGUILayout.Foldout(ShowAmbientSettings, "Ambient Settings");
-            
-            EditorGUI.BeginDisabledGroup(true);
             if (ShowAmbientSettings)
             {
+                EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.BeginVertical("box");
                 {
                     matEditor.ColorProperty(_AmbientColor, "Color");
                     matEditor.RangeProperty(_AmbientPower, "Power");
                 }
                 EditorGUILayout.EndVertical();
+                EditorGUI.EndDisabledGroup();
             }
-            EditorGUI.EndDisabledGroup();
         }
 
         private void OtherSettings()
@@ -1447,41 +1456,48 @@ namespace Minimalist
             EditorGUILayout.EndVertical();
 
             RimEnable = EditorGUILayout.Toggle("Rim", RimEnable);
-            EditorGUI.BeginDisabledGroup(true);
             if (RimEnable)
             {
+                EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.BeginVertical("box");
                 {
                     matEditor.ColorProperty(_RimColor, "Color");
                     matEditor.RangeProperty(_RimPower, "Power");
                 }
                 EditorGUILayout.EndVertical();
+                EditorGUI.EndDisabledGroup();
             }
-            EditorGUI.EndDisabledGroup();
 
             realtimeShadow = EditorGUILayout.Toggle("Realtime Shadow", realtimeShadow);
-            EditorGUI.BeginDisabledGroup(true);
             if (realtimeShadow)
             {
+                EditorGUI.BeginDisabledGroup(true);
+                EditorGUILayout.BeginVertical("Box");
                 matEditor.ColorProperty(_ShadowColor, "Shadow Color");
+                matEditor.RangeProperty(_ShadowInfluence, "Shadow Influence");
+                matEditor.RangeProperty(_ShadowBlend, "Shadow Strength");
+                EditorGUILayout.EndVertical();
+                EditorGUI.EndDisabledGroup();
             }
             else
-            {
-                targetMat.DisableKeyword("SHADOW_ON");
-            }
-            EditorGUI.EndDisabledGroup();
-
+            
             dontMix = EditorGUILayout.Toggle("Don't mix shadings", dontMix);
             if (dontMix) targetMat.EnableKeyword("DONTMIX");
             else targetMat.DisableKeyword("DONTMIX");
-            
-            EditorGUI.BeginDisabledGroup(true);
             matEditor.RangeProperty(_Fade, "Fade");
+            EditorGUI.BeginDisabledGroup(true);
             cullmode = (Cull) EditorGUILayout.EnumPopup("Cull", cullmode);
-            blendingMode = (Mode) EditorGUILayout.EnumPopup("Blending Mode", blendingMode);
             EditorGUI.EndDisabledGroup();
+            blendingMode = (Mode) EditorGUILayout.EnumPopup("Blending Mode", blendingMode);
+            EditorGUI.BeginDisabledGroup(true);
+            ZWriteOverride = EditorGUILayout.Toggle("ZWrite Override", ZWriteOverride);
+            if (ZWriteOverride) zWrite = (ZWrite) EditorGUILayout.EnumPopup("ZWrite", zWrite);
+            EditorGUILayout.Toggle("GPU Instancing", false);
+            EditorGUI.EndDisabledGroup();
+            
             SetupMaterialMode(blendingMode, targetMat);
         }
+
 
         private void SetupMaterialMode(Mode _blendingMode, Material _material)
         {
@@ -1491,7 +1507,7 @@ namespace Minimalist
                 _material.renderQueue = (int) RenderQueue.Geometry;
                 _material.SetInt("_SrcBlend", (int) BlendMode.One);
                 _material.SetInt("_DstBlend", (int) BlendMode.Zero);
-                _material.SetInt("_ZWrite", 1);
+                if(!ZWriteOverride)_material.SetInt("_ZWrite", 1);
             }
             else if (_blendingMode == Mode.Transparent)
             {
@@ -1499,7 +1515,7 @@ namespace Minimalist
                 _material.renderQueue = (int) RenderQueue.Transparent;
                 _material.SetInt("_SrcBlend", (int) BlendMode.SrcAlpha);
                 _material.SetInt("_DstBlend", (int) BlendMode.OneMinusSrcAlpha);
-                _material.SetInt("_ZWrite", 0);
+                if(!ZWriteOverride)_material.SetInt("_ZWrite", 0);
             }
         }
 
@@ -1510,104 +1526,58 @@ namespace Minimalist
             else targetMat.DisableKeyword("UNITY_FOG");
 
             EnableHFog = EditorGUILayout.Toggle("Height fog", EnableHFog);
-            EditorGUI.BeginDisabledGroup(true);
             if (EnableHFog)
             {
+                EditorGUI.BeginDisabledGroup(true);
                 matEditor.ColorProperty(_Color_Fog, "Color");
                 matEditor.FloatProperty(_FogYStartPos, "Height");
                 matEditor.FloatProperty(_FogHeight, "Falloff");
+                EditorGUI.EndDisabledGroup();
             }
-            EditorGUI.EndDisabledGroup();
         }
 
         private void ColorCorrectionModule()
         {
             ColorCorrectionEnable = EditorGUILayout.Toggle("Enable", ColorCorrectionEnable);
-            EditorGUI.BeginDisabledGroup(true);
             if (ColorCorrectionEnable)
             {
-                
+                EditorGUI.BeginDisabledGroup(true);
                 matEditor.RangeProperty(_Saturation, "Saturation");
                 matEditor.RangeProperty(_Brightness, "Brightness");
                 matEditor.ColorProperty(_TintColor, "Tint");
+                EditorGUI.EndDisabledGroup();
             }
-            EditorGUI.EndDisabledGroup();
         }
 
+        private void Promo(){
+            EditorGUILayout.Space();
+            if(GUILayout.Button("Get the full version")){
+                Application.OpenURL("https://assetstore.unity.com/packages/vfx/shaders/minimalist-lowpoly-flat-gradient-shader-91366?utm_source=free_version_upgrade_btn&utm_medium=editor");
+            }
+            EditorGUILayout.BeginHorizontal();
+            {
+                if(GUILayout.Button("Rate/Review")){
+                    Application.OpenURL("https://assetstore.unity.com/packages/vfx/shaders/minimalist-free-lowpoly-flat-gradient-shader-96148?utm_source=free_version_rate_btn&utm_medium=editor");
+                }if(GUILayout.Button("Contact")){
+                    Application.OpenURL("mailto://isfaqrahman98@gmail.com");
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+        }
+
+        private void AlignCameraToSelectedObject(string ShadingSide)
+        {
+            //not available in free version
+        }
+
+        private void ResetCamera()
+        {
+            //not available in free version
+        }
 
         void SceneGUI(SceneView _sceneview)
         {
-            if (!isAnythingSelected()) gradientHandle = null;
-
-            if (gradientHandle != null)
-            {
-                Tools.hidden = true;
-                EditorGUI.BeginChangeCheck();
-
-                Vector3 pivot = new Vector3(), falloff = new Vector3();
-                float rotation = 0;
-
-                if (gradientHandle.profile == "LeftGradient" || gradientHandle.profile == "RightGradient")
-                {
-                    pivot = Handles.PositionHandle(gradientHandle.pivot, Quaternion.identity);
-                    gradientHandle.pivot = new Vector3(gradientHandle.pivot.x, pivot.y, pivot.z);
-                    falloff = Handles.PositionHandle(gradientHandle.falloff, Quaternion.identity);
-                    gradientHandle.falloff = new Vector3(gradientHandle.falloff.x, falloff.y, falloff.z);
-                    rotation = Vector3.SignedAngle(falloff - pivot, Vector3.up, Vector3.right);
-                }
-                else if (gradientHandle.profile == "FrontGradient" || gradientHandle.profile == "BackGradient")
-                {
-                    pivot = Handles.PositionHandle(gradientHandle.pivot, Quaternion.identity);
-                    gradientHandle.pivot = new Vector3(pivot.x, pivot.y, gradientHandle.pivot.z);
-                    falloff = Handles.PositionHandle(gradientHandle.falloff, Quaternion.identity);
-                    gradientHandle.falloff = new Vector3(falloff.x, falloff.y, gradientHandle.falloff.z);
-                    rotation = Vector3.SignedAngle(falloff - pivot, Vector3.up, Vector3.back);
-                }
-                else
-                {
-                    pivot = Handles.PositionHandle(gradientHandle.pivot, Quaternion.identity);
-                    gradientHandle.pivot = new Vector3(pivot.x, gradientHandle.pivot.y, pivot.z);
-                    falloff = Handles.PositionHandle(gradientHandle.falloff, Quaternion.identity);
-                    gradientHandle.falloff = new Vector3(falloff.x, gradientHandle.falloff.y, falloff.z);
-                    rotation = Vector3.SignedAngle(falloff - pivot, Vector3.forward, Vector3.up);
-                }
-
-                if (EditorGUI.EndChangeCheck())
-                {
-                    Undo.RecordObject(targetMat, "Undo gradient values");
-                    Undo.RecordObject(gradientHandle, "Undo gradient handles");
-
-                    Vector3 objPos = selectedObject.position;
-                    if (gSpace == GradientSpace.WorldSpace) objPos = Vector3.zero;
-
-                    if (gradientHandle.profile == "FrontGradient" || gradientHandle.profile == "BackGradient")
-                    {
-                        RecorderProps[gradientHandle.Ystart].vectorValue =
-                            new Vector2(gradientHandle.pivot.x - objPos.x, gradientHandle.pivot.y - objPos.y);
-                    }
-                    else if (gradientHandle.profile == "LeftGradient" || gradientHandle.profile == "RightGradient")
-                    {
-                        RecorderProps[gradientHandle.Ystart].vectorValue =
-                            new Vector2(gradientHandle.pivot.z - objPos.z, gradientHandle.pivot.y - objPos.y);
-                    }
-                    else
-                    {
-                        RecorderProps[gradientHandle.Ystart].vectorValue =
-                            new Vector2(gradientHandle.pivot.z - objPos.x, gradientHandle.pivot.x - objPos.z);
-                    }
-
-                    RecorderProps[gradientHandle.Height].floatValue =
-                        Vector3.Distance(gradientHandle.pivot, gradientHandle.falloff);
-                    RecorderProps[gradientHandle.rotation].floatValue = Remap(rotation, -180, 180, 360, 0);
-                    matEditor.Repaint();
-                }
-
-                Handles.DrawDottedLine(gradientHandle.pivot, gradientHandle.falloff, 5);
-            }
-            else
-            {
-                Tools.hidden = false;
-            }
+            //Not available in free version
         }
 
         //Helper Classes and Methods
