@@ -6,34 +6,34 @@ EditorUserSettings:
   serializedVersion: 4
   m_ConfigSettings:
     RecentlyUsedSceneGuid-0:
-      value: 0700065e06015b0c5e0d0f2142270b444e15487c2d7c2067742d1c30e4b6363e
-      flags: 0
-    RecentlyUsedSceneGuid-1:
       value: 0006065e0657080f545f5e7549710844134e41297b2b736329701c37bbb6316d
       flags: 0
-    RecentlyUsedSceneGuid-2:
-      value: 500152515603515e0e0a5e2742210b44154f1c7e7f7a25612e781865e6b46561
-      flags: 0
-    RecentlyUsedSceneGuid-3:
-      value: 060503535054590a5d590d2042755a444116192e79787066797f1967b5e33168
-      flags: 0
-    RecentlyUsedSceneGuid-4:
-      value: 0052560357045c5954085e2447745a44464e1a782f7e256879284d6ae4b9633b
-      flags: 0
-    RecentlyUsedSceneGuid-5:
+    RecentlyUsedSceneGuid-1:
       value: 0702500251045f0a0c0c5f7a14725e4410151e7f7d2b24342f2a4467b0b33560
       flags: 0
-    RecentlyUsedSceneGuid-6:
-      value: 5301065f0003595a5a5f5f2314705944174f482e79297633792f1e66e7b3656d
-      flags: 0
-    RecentlyUsedSceneGuid-7:
+    RecentlyUsedSceneGuid-2:
       value: 5253040357005b0e5c0b5826137a5a44424e407f7c297f33787c496be6b3366d
       flags: 0
-    RecentlyUsedSceneGuid-8:
+    RecentlyUsedSceneGuid-3:
+      value: 0052560357045c5954085e2447745a44464e1a782f7e256879284d6ae4b9633b
+      flags: 0
+    RecentlyUsedSceneGuid-4:
+      value: 060503535054590a5d590d2042755a444116192e79787066797f1967b5e33168
+      flags: 0
+    RecentlyUsedSceneGuid-5:
+      value: 53085254560d5e0f0c5c5b2013730b4413164d7f7c2b7064292f1b30b4e1316c
+      flags: 0
+    RecentlyUsedSceneGuid-6:
       value: 525406000301590b095d5a7043750a4446164f7f7d7c773378284836b0b56260
       flags: 0
+    RecentlyUsedSceneGuid-7:
+      value: 05030d0403545a0a55565a7245740e44464f1a7e7a2a776928284d64e6e6663d
+      flags: 0
+    RecentlyUsedSceneGuid-8:
+      value: 500152515603515e0e0a5e2742210b44154f1c7e7f7a25612e781865e6b46561
+      flags: 0
     RecentlyUsedSceneGuid-9:
-      value: 53085254560d5e0f0c5c5b2013730b4413164d7f7c2b7064292f1b30b4e1316c
+      value: 5301065f0003595a5a5f5f2314705944174f482e79297633792f1e66e7b3656d
       flags: 0
     RecentlyUsedScenePath-0:
       value: 22424703114646680e0b0227036c73150012146a7e66333e243d04
