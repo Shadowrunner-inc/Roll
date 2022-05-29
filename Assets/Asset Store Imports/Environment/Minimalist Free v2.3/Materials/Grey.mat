@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Grey
-  m_Shader: {fileID: 4800000, guid: 7f50d1ec77e2cc9459ca9d36924ffc53, type: 3}
+  m_Shader: {fileID: 4800000, guid: 0aa18dddb55bf054cb6811a4c172b2b0, type: 3}
   m_ShaderKeywords: BACKSOLID BOTTOMSOLID FRONTSOLID LEFTSOLID RIGHTSOLID TOPSOLID
     _AOUV_UV0 _GRADIENTSPACE_WORLD_SPACE _GRADSETTINGS_B_USE_GLOBAL _GRADSETTINGS_D_USE_GLOBAL
     _GRADSETTINGS_F_USE_GLOBAL _GRADSETTINGS_L_USE_GLOBAL _GRADSETTINGS_R_USE_GLOBAL
@@ -68,6 +68,7 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - _AOEnable: 0
     - _AOPower: 0
@@ -101,7 +102,7 @@ Material:
     - _GradientHeight_L: 1
     - _GradientHeight_R: 1
     - _GradientHeight_T: 1
-    - _GradientSpace: 0
+    - _GradientSpace: 1
     - _HFogEnable: 0
     - _LMPower: 1
     - _LmapBlendingMode: 2
@@ -129,12 +130,14 @@ Material:
     - _Shading_L: 1
     - _Shading_R: 1
     - _Shading_T: 1
+    - _ShadowBlend: 0
+    - _ShadowInfluence: 0
     - _ShowAO: 0
     - _ShowAmbientSettings: 0
     - _ShowBack: 1
     - _ShowBottom: 1
     - _ShowColorCorrection: 0
-    - _ShowCustomShading: 0
+    - _ShowCustomShading: 1
     - _ShowFog: 0
     - _ShowFront: 1
     - _ShowGlobalGradientSettings: 0
@@ -149,15 +152,16 @@ Material:
     - _UVSec: 0
     - _UnityFogEnable: 0
     - _ZWrite: 1
+    - _ZWriteOverride: 0
     m_Colors:
     - _AOColor: {r: 1, g: 1, b: 1, a: 1}
     - _AmbientColor: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Color1_B: {r: 0.6981132, g: 0.6981132, b: 0.6981132, a: 1}
-    - _Color1_D: {r: 0.8490566, g: 0.8490566, b: 0.8490566, a: 1}
-    - _Color1_F: {r: 0.7830189, g: 0.7830189, b: 0.7830189, a: 1}
-    - _Color1_L: {r: 0.6981132, g: 0.6981132, b: 0.6981132, a: 1}
-    - _Color1_R: {r: 0.6132076, g: 0.6132076, b: 0.6132076, a: 1}
+    - _Color1_B: {r: 0.49056602, g: 0.49056602, b: 0.49056602, a: 1}
+    - _Color1_D: {r: 0.4716981, g: 0.4716981, b: 0.4716981, a: 1}
+    - _Color1_F: {r: 0.4716981, g: 0.4716981, b: 0.4716981, a: 1}
+    - _Color1_L: {r: 0.4245283, g: 0.4245283, b: 0.4245283, a: 1}
+    - _Color1_R: {r: 0.4056604, g: 0.4056604, b: 0.4056604, a: 1}
     - _Color1_T: {r: 0.5660378, g: 0.5660378, b: 0.5660378, a: 1}
     - _Color2_B: {r: 1, g: 1, b: 1, a: 1}
     - _Color2_D: {r: 1, g: 1, b: 1, a: 1}
@@ -184,3 +188,4 @@ Material:
     - _RimColor: {r: 1, g: 1, b: 1, a: 1}
     - _ShadowColor: {r: 0.1, g: 0.1, b: 0.1, a: 1}
     - _TintColor: {r: 1, g: 1, b: 1, a: 1}
+  m_BuildTextureStacks: []

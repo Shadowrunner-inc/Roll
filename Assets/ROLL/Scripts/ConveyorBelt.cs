@@ -7,6 +7,7 @@ public class ConveyorBelt : MonoBehaviour
 {
     [SerializeField] private float speed = 10f;
     private Rigidbody _Rigi;
+    public Vector3 moveTowards;
 
     void Awake()
     {
@@ -37,7 +38,8 @@ public class ConveyorBelt : MonoBehaviour
     {
         Vector3 pos = _Rigi.position;
 
-        _Rigi.position += Vector3.forward * speed * Time.fixedDeltaTime;
+        _Rigi.position += moveTowards * speed * Time.fixedDeltaTime;
+
         _Rigi.MovePosition(pos);
     }
 }
